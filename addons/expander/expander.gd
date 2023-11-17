@@ -1,28 +1,12 @@
 @tool
 extends EditorPlugin
 
-var shortcut := _get_or_set_shortcut()
+@onready var shortcut := preload("res://addons/expander/expander.tres")
 
 # Original implementation: https://github.com/godotengine/godot-proposals/issues/2024#issuecomment-1378782833
 
 const PLUGIN_ID := "expander"
 const PLUGIN_PATH := "plugins/"+PLUGIN_ID
-
-func _get_or_set_shortcut() -> Shortcut:
-	var key := PLUGIN_PATH + "/shortcut"
-	if not ProjectSettings.has_setting(key):
-		var default_shortcut := preload("res://addons/expander/expander.tres")
-		var property_info := {
-			"name": key,
-			"type": TYPE_OBJECT,
-			"hint": PROPERTY_HINT_RESOURCE_TYPE,
-			"hint_string": "Shortcut"
-		}
-		ProjectSettings.set_setting(key, default_shortcut)
-		ProjectSettings.add_property_info(property_info)
-
-	var loaded_shortcut: Shortcut = ProjectSettings.get_setting(key)
-	return loaded_shortcut
 
 func _input(event: InputEvent) -> void:
 	if shortcut and shortcut.matches_event(event):
